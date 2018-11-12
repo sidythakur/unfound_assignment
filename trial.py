@@ -1,6 +1,7 @@
 import wikipedia
 import re
 import nltk
+nltk.download('punkt')
 nltk.data.path.append('./nltk.txt') 
 from nltk.tokenize import word_tokenize,sent_tokenize
 from nltk.corpus import stopwords
