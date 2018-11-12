@@ -105,8 +105,8 @@ def unfound(phrase,n):
 
         df = df.drop(sent_removal_list)
         df = df.sort_values(by=['sum'], ascending=False)
-
-        df1 = df.head(6)
+        n1=int(n)
+        df1 = df.head(n1)
         df1 = df1.sort_values(by=['year'])
         for data in df1['sentences']:
             print(data+"\n##############################")
