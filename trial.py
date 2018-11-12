@@ -9,37 +9,35 @@ import pandas as pd
 def unfound(phrase,n):
     
     links = wikipedia.search(phrase)
-    corpus = []
+    corpus = set()
     res=[]
     if(len(links)==0):
         res.append("None")
     else:
-        res.append(links)
+          
         for i in range(len(links)):
             try:
                 link=links[i]
                 print(link)
-                
+                res.append(link)
                 link = wikipedia.page(link).content
                 head , sep , tail = link.partition('== See also ==')
-                corpus.append(re.sub("\n|\r" , '', head))
+                corpus.add(re.sub("\n|\r" , '', head))
             except:
                 i=i+1
-        corpus = set(corpus)
 
-        documents=[]
+        all_documents_data=[]
 
         for data in corpus:
-            documents.append(sent_tokenize(data))
+            all_documents_data.append(sent_tokenize(data))
 
-        df = pd.DataFrame(columns=['sentences','year','sum','keyword'])
-
-        temporal=["today","tomorrow","yesterday"]
+        df = pd.DataFrame(columns = ['sentences','year','sum','keyword'])
+        temporal = ["today","tomorrow","yesterday"]
 
         count = 0
 
-        for data in documents:
-                
+        for data in all_documents_data:
+
             for i in data:
                 if(re.search("[0-9]{4}",i)): 
                     year = (word_tokenize(re.sub('[^0-9 ]', ' ', i)))
@@ -52,12 +50,12 @@ def unfound(phrase,n):
                     count += 1
                 for t in temporal:
                     if (t in i and i not in df['sentences'][:]):
-                        df.loc[count, ['sentences','year']] = [i,t]
+                        df.loc[count, ['sentences','year']] = [i,2018]
                         count += 1
 
         final_sentence_freq = dict()
         ps = PorterStemmer()
-        for document in documents:
+        for document in all_documents_data:
             for data in document:
                 data = re.sub('[^A-Za-z0-9$&% ]', ' ', data)
                 data = word_tokenize(data.lower())
@@ -75,24 +73,40 @@ def unfound(phrase,n):
             df["keyword"][i] =  [ps.stem(word) for word in wordfreq if not word in set(stopwords.words('english'))]
 
         for i in range(len(df["sentences"])):
-            df["sum"][i] = 0
-            
-        #for data in df['sentences']:
-        #    for words in data:
-        #        for i in range(len(df["sentences"])):
-        #            if words in df["keyword"][i]:
-        #                if words in final_sentence_freq:
-        #                    df["sum"].values[i] = final_sentence_freq.get(words) + df["sum"][i]
-            
+            df["sum"][i] = 0.0
+
         for i in range(len(df["sentences"])):
             for words in df["keyword"][i]:       
                 if words in final_sentence_freq:
                     df["sum"].values[i] = final_sentence_freq.get(words) + df["sum"][i]
             df["sum"][i] = df["sum"][i]/len(df["keyword"][i])
-            
+
+        similarity_matrix = [[0 for x in range(len(df["sentences"]))] for y in range(len(df["sentences"]))]
+
+        for i in range(len(df["sentences"])):
+            for j in range(len(df["sentences"])):
+                if j != i and df['year'][j] == df['year'][i] :
+                    for word in df['keyword'][i] :
+                        if word in df['keyword'][j]:
+                            similarity_matrix[i][j] =  similarity_matrix[i][j] + 1
+
+        for i in range(len(df["sentences"])):
+            for j in range(len(df["sentences"])):
+                similarity_matrix[i][j] =  (similarity_matrix[i][j] / len(df['keyword'][i]))*100 
+
+        sent_removal_list = [] 
+
+        for i in range(len(df["sentences"])):
+            for j in range(len(df["sentences"])):
+                if similarity_matrix[i][j] > 50:
+                    sent_removal_list.append(i)
+                    similarity_matrix[j][i] = 0
+                    break
+
+        df = df.drop(sent_removal_list)
         df = df.sort_values(by=['sum'], ascending=False)
-        n1=int(n)
-        df1 = df.head(n1)
+
+        df1 = df.head(6)
         df1 = df1.sort_values(by=['year'])
         for data in df1['sentences']:
             print(data+"\n##############################")
