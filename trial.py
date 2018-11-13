@@ -13,7 +13,7 @@ def unfound(phrase,n):
     corpus = set()
     res=[]
     if(len(links)==0):
-        res.append("None")
+        res.append("Null")
     else:
           
         for i in range(len(links)):
@@ -21,12 +21,13 @@ def unfound(phrase,n):
                 link=links[i]
                 print(link)
                 res.append(link)
+                
                 link = wikipedia.page(link).content
                 head , sep , tail = link.partition('== See also ==')
                 corpus.add(re.sub("\n|\r" , '', head))
             except:
                 i=i+1
-
+        res.append("Your result is here")
         all_documents_data=[]
 
         for data in corpus:
