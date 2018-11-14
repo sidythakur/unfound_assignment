@@ -24,7 +24,7 @@ def unfound(phrase,n):
                 
                 link = wikipedia.page(link).content
                 head , sep , tail = link.partition('== See also ==')
-                corpus.add(re.sub("\n|\r" , '', head))
+                corpus.add(re.sub("\n|\r" , ' ', head))
             except:
                 i=i+1
         res.append("Your result is here")
