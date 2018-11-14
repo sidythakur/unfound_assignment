@@ -12,7 +12,7 @@ def unfound(phrase,n):
     links = wikipedia.search(phrase)
     corpus = set()
     res=[]
-    res.append("Links")
+    res.append("--------Links--------")
     if(len(links)==0):
         res.append("Null")
     else:
@@ -29,7 +29,7 @@ def unfound(phrase,n):
             except:
                 i=i+1
         res.append("    ")
-        res.append("---------------Your result is here---------------")
+        res.append("----------------------------------Your result is here----------------------------------")
         all_documents_data=[]
 
         for data in corpus:
