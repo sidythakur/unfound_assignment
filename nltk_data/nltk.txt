@@ -1,4 +1,4 @@
-import nltk
+
 nltk.download('punkt')
 wordnet
 pros_cons
