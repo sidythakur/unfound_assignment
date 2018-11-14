@@ -48,11 +48,11 @@ def unfound(phrase,n):
                         if len(day) == 4:
                             ans = day
                             break                 
-                    df.loc[count, ['sentences','year']] = [i,ans]
+                    df.loc[count, ['sentences','year']] = [i,int(ans)]
                     count += 1
                 for t in temporal:
                     if (t in i and i not in df['sentences'][:]):
-                        df.loc[count, ['sentences','year']] = [i,2018]
+                        df.loc[count, ['sentences','year']] = [i,int(2018)]
                         count += 1
 
         final_sentence_freq = dict()
