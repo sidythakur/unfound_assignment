@@ -2,7 +2,7 @@ import wikipedia
 import re
 import nltk
 #nltk.download('punkt')
-nltk.data.path.append('./nltk_data/nltk.txt') 
+#nltk.data.path.append('./nltk_data/nltk.txt') 
 from nltk.tokenize import word_tokenize,sent_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -12,6 +12,7 @@ def unfound(phrase,n):
     links = wikipedia.search(phrase)
     corpus = set()
     res=[]
+    res.append("Links")
     if(len(links)==0):
         res.append("Null")
     else:
@@ -27,7 +28,8 @@ def unfound(phrase,n):
                 corpus.add(re.sub("\n|\r" , ' ', head))
             except:
                 i=i+1
-        res.append("Your result is here")
+        res.append("    ")
+        res.append("---------------Your result is here---------------")
         all_documents_data=[]
 
         for data in corpus:
