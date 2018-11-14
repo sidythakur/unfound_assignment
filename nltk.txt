@@ -4,7 +4,7 @@ reuters
 hmm_treebank_pos_tagger
 maxent_treebank_pos_tagger
 universal_tagset
-punkt
+nltk.download('punkt')
 averaged_perceptron_tagger_ru
 averaged_perceptron_tagger
 snowball_data
