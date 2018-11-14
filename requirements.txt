@@ -22,5 +22,3 @@ virtualenvwrapper-win==1.2.5
 Werkzeug==0.14.1
 whitenoise==4.1
 wikipedia==1.4.0
-nltk.download('plunk')
-nltk.download('stopwords')
